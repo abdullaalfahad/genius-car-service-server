@@ -13,7 +13,7 @@ app.use(express.json());
 
 function verifyJWT(req, res, next) {
     const authHeader = req.headers.authorization;
-    // console.log(authHeader);
+    console.log(authHeader);
     if (!authHeader) {
         return res.status(401).send({ message: 'unauthorized access' });
     }
@@ -26,7 +26,6 @@ function verifyJWT(req, res, next) {
         req.decoded = decoded;
         next();
     })
-
 }
 
 
@@ -46,7 +45,7 @@ async function run() {
             const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
                 expiresIn: '1d'
             });
-            res.send(accessToken);
+            res.send({accessToken});
         })
 
         // service collection
@@ -78,7 +77,6 @@ async function run() {
         })
 
         // order collection api
-
         app.get('/order', verifyJWT, async (req, res) => {
             const decodedEmail = req.decoded?.email;
             const email = req.query.email;
